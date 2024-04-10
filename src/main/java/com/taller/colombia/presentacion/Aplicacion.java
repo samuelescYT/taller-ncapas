@@ -1,19 +1,47 @@
 package com.taller.colombia.presentacion;
 
 import com.taller.colombia.controladores.DepartamentoController;
+import com.taller.colombia.controladores.PerroController;
 import com.taller.colombia.modelos.Departamento;
+import com.taller.colombia.modelos.Perro;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Aplicacion {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        DepartamentoController controller = new DepartamentoController();
+
         int opcion = 0;
 
-        System.out.println("CRUD Departamentos");
+        System.out.println("Bienvenido");
+        System.out.println("Ingrese 1 para entrar al CRUD de departamentos");
+        System.out.println("Ingrese 2 para entrar al CRUD de perros");
+        System.out.print("Opcion: ");
+        opcion = scanner.nextInt();
+
+        switch (opcion) {
+            case 1: {
+                DepartamentoController controller = new DepartamentoController();
+                opcion = 0;
+                crudDepartamentos(controller, scanner, opcion);
+                break;
+            }
+            case 2: {
+                PerroController controller = new PerroController();
+                opcion = 0;
+                crudPerritos(controller, scanner, opcion);
+                break;
+            }
+            default:
+                System.out.println("Opcion incorrecta");
+        }
+
+
+    }
+
+    public static void crudDepartamentos(DepartamentoController controller, Scanner scanner, int opcion) {
+        System.out.println("\nCRUD Departamentos");
 
         do {
             System.out.println("1. Agregar departamento");
@@ -116,4 +144,103 @@ public class Aplicacion {
         } while(opcion != 6);
     }
 
+    public static void crudPerritos(PerroController controller, Scanner scanner, int opcion) {
+        System.out.println("\nCRUD perros");
+
+        do {
+            System.out.println("1. Agregar perro");
+            System.out.println("2. Obtener perros");
+            System.out.println("3. Buscar perro");
+            System.out.println("4. Actualizar perro");
+            System.out.println("5. Eliminar perro");
+            System.out.print("Opcion: ");
+            opcion = scanner.nextInt();
+
+            scanner.nextLine();
+
+            switch(opcion) {
+                case 1: {
+                    String nombre, raza, color, apodo;
+
+                    System.out.print("Ingrese el nombre del perro: ");
+                    nombre = scanner.nextLine();
+                    System.out.print("Ingrese la raza del perro: ");
+                    raza = scanner.nextLine();
+                    System.out.print("Ingrese el color del perro: ");
+                    color = scanner.nextLine();
+                    System.out.print("Ingrese el apodo del perro: ");
+                    apodo = scanner.nextLine();
+
+                    Perro perro = new Perro(nombre, raza, color, apodo);
+                    controller.agregarPerro(perro);
+                    System.out.println();
+                    break;
+                }
+                case 2: {
+                    System.out.println("Los perros que hay son: \n");
+                    for(Perro p: controller.obtenerPerros()) {
+                        System.out.println("Nombre: "+p.getNombre());
+                        System.out.println("Raza: "+p.getRaza());
+                        System.out.println("Color: "+p.getColor());
+                        System.out.println("Apodo: "+p.getApodo());
+                        System.out.println();
+                    }
+                    break;
+                }
+                case 3: {
+                    String nombrePerro;
+                    System.out.print("Ingrese el nombre del perro que va a buscar: ");
+                    nombrePerro = scanner.nextLine();
+
+                    Perro perro = controller.buscarPerro(nombrePerro);
+
+                    if(perro != null) {
+                        System.out.println("Perro encontrado!");
+                        System.out.println("Nombre: "+perro.getNombre());
+                        System.out.println("Raza: "+perro.getRaza());
+                        System.out.println("Color: "+perro.getColor());
+                        System.out.println("Apodo: "+perro.getApodo());
+
+                    } else {
+                        System.out.println("No hay un perro que tenga ese nombre");
+                    }
+                    System.out.println();
+                    break;
+                }
+                case 4: {
+                    String nombre, raza, color, apodo;
+
+                    System.out.print("Ingrese el nombre del perro que va a modificar: ");
+                    nombre = scanner.nextLine();
+                    System.out.print("Ingrese la nueva raza del perro: ");
+                    raza = scanner.nextLine();
+                    System.out.print("Ingrese el nuevo color del perro: ");
+                    color = scanner.nextLine();
+                    System.out.print("Ingrese el nuevo apodo del perro: ");
+                    apodo = scanner.nextLine();
+                    System.out.println();
+
+                    Perro perro = new Perro(nombre, raza, color, apodo);
+                    controller.actualizarPerro(perro);
+                    System.out.println();
+                    break;
+                }
+                case 5: {
+                    String nombre;
+                    System.out.print("Ingrese el nombre del perro que desea eliminar: ");
+                    nombre = scanner.nextLine();
+
+                    controller.eliminarPerro(nombre);
+                    System.out.println();
+                    break;
+                }
+                case 6:
+                    System.out.println("Gracias por usar!");
+                    break;
+                default:
+                    System.out.println("Opcion incorrecta, vuelva a intentar");
+                    System.out.println();
+            }
+        } while(opcion != 6);
+    }
 }
